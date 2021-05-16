@@ -58,6 +58,6 @@ describe("Project Table component", () => {
     expect(firstRow.find(".view-project").exists()).toBe(false);
     await firstRow.find("td.project-name-column").trigger("click");
     // after clicked;
-    expect(firstRow.find(".view-project").exists()).toBe(false);
+    expect(firstRow.find(".view-project").exists()).toBe(true);
   });
 });
