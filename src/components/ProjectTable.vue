@@ -28,7 +28,11 @@
           <td>{{ row.main_contractor }}</td>
           <td>{{ row.lga }}</td>
           <td>{{ row.state }}</td>
-          <td>{{ row.status }}</td>
+          <td>
+            <div :class="['status', getStatusClass(row.status)]">
+              {{ row.status }}
+            </div>
+          </td>
           <td>{{ row.sector }}</td>
           <div class="view-project" v-if="selected === index">
             <button>View Project</button>
@@ -40,6 +44,16 @@
 </template>
 
 <script>
+// map a status to a css theme className
+const statusClassesMap = {
+  "On hold": "on-hold",
+  "Site Clearing": "site-clearing",
+  Completed: "completed",
+  "Under construction": "under-construction",
+  Conceptual: "conceptual",
+  Implementation: "implementation",
+};
+
 export default {
   name: "ProjectTable",
   props: {
@@ -57,6 +71,9 @@ export default {
     selectProject(index) {
       // if already selected, unselect
       this.selected = this.selected === index ? null : index;
+    },
+    getStatusClass(status) {
+      return statusClassesMap[status] ?? "";
     },
     getAnimationDelay(index) {
       const interval = 0.18; // 0.18 second
@@ -135,6 +152,39 @@ table {
       transform: rotate(90deg) translateX(25%);
       margin-left: 10px;
       cursor: pointer;
+    }
+  }
+  .status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    background: var(--background, #222);
+    color: var(--color, #ccc);
+    white-space: pre;
+
+    &.under-construction {
+      --color: #a17d47;
+      --background: #fadfb4;
+    }
+    &.conceptual {
+      --color: #686d32;
+      --background: #dde591;
+    }
+    &.site-clearing {
+      --color: #2a6d8b;
+      --background: #a0e2ff;
+    }
+    &.implementation {
+      --color: #7c50ca;
+      --background: #dac6fd;
+    }
+    &.completed {
+      --color: #3b8a3d;
+      --background: #bef7c0;
+    }
+    &.on-hold {
+      --color: #a35752;
+      --background: #ffc7c3;
     }
   }
 }
